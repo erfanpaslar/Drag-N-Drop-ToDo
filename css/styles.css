@@ -1,0 +1,168 @@
+body {
+  margin: 0;
+  font-size: 62.5%;
+  font-family: sans-serif;
+  /* overflow-x: hidden; */
+}
+
+.todo-box {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  width: 100vw;
+  background: deeppink;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+}
+.todoTitle {
+  text-align: center;
+  font-size: 2rem;
+  padding: 0.5rem 0 0 0;
+  margin: 0.5rem;
+}
+
+.todoItem {
+  font-size: 1.2rem;
+  width: 100vw;
+  padding: 1rem 2rem 1rem 1rem;
+  box-sizing: border-box;
+  margin: 0.2rem auto;
+  background: royalblue;
+  cursor: pointer;
+  /* transition: background 0.1s linear; */
+}
+
+.themeRed {
+  background: red;
+}
+.todoItemContainer {
+  position: relative;
+  margin: 0 auto;
+}
+
+.removeItem {
+  position: absolute;
+  cursor: pointer;
+  right: 0.3rem;
+  top: 0.7rem;
+  width: 1rem;
+  height: 1rem;
+  background-image: url(../images/x.svg);
+}
+.colorPickerWrapper {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.192);
+  top: 2.1rem;
+  right: 0.3rem;
+  border-radius: 50%;
+  cursor: pointer;
+}
+input[type="color"] {
+  cursor: pointer;
+  opacity: 0;
+  width: 1rem;
+  height: 1rem;
+  border: none;
+  background: #0000;
+  padding: 0;
+}
+
+.input {
+  outline: 0;
+  border: 0;
+}
+.enabled {
+  cursor: text;
+  /* transform: scale(1.1); */
+  transition: transform 0.1s linear;
+}
+
+.remove {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  outline: none;
+  border: none;
+  background-image: url(../images/trash.svg);
+  background-color: #0000;
+}
+.addItem {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  width: 1rem;
+  height: 1rem;
+  outline: none;
+  border: none;
+  background-image: url(../images/x.svg);
+  transform: rotate(45deg);
+  background-color: #0000;
+}
+.addItem:hover {
+  transform: scale(1.5) rotate(45deg);
+}
+
+.todo-box:hover {
+  /* background: aqua; */
+  /* transition: background 0.1s linear; */
+}
+.dragOver {
+  background: gold;
+  padding: 0 0 5rem 0;
+}
+@media screen and (min-width: 768px) {
+  .todoContainer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .todo-box {
+    width: 50vw;
+  }
+  .todoItem {
+    border-radius: 0.5rem;
+    width: 48vw;
+  }
+}
+@media screen and (min-width: 1024px) {
+  .todoContainer {
+    display: grid;
+    margin: auto;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .todo-box {
+    width: 30vw;
+  }
+  .todoItem {
+    border-radius: 0.5rem;
+    width: 28vw;
+  }
+}
+
+/* scrollbar */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  cursor: auto;
+}
+
+::-webkit-scrollbar-track {
+  background-color: gold;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: red;
+}
+@media screen and (min-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 0px;
+    /* width: 10px; */
+    height: 7px;
+    cursor: auto;
+  }
+}
