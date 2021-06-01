@@ -12,11 +12,14 @@
       <span class="colorPickerBgWrapper cPtr">
         <input type="color" onChange="changeColorBg(this)" value="#444444" />
       </span>
-      <button class="widget addCollection xImg nbno cPtr" onclick="addCollection()"></button>
-			<!-- <h2 id="hintText" ></h2> -->
+      <button
+        class="widget addCollection xImg nbno cPtr"
+        onclick="addCollection()"
+      ></button>
+      <!-- <h2 id="hintText" ></h2> -->
     </div>
     <div id="todoContainer" class="todoContainer">
-      <div
+      <!-- <div
         id="box0"
         class="todo-box boxShadow"
         ondrop="drop(event)"
@@ -27,10 +30,19 @@
         <span class="colorPickerBoxWrapper cPtr">
           <input type="color" onChange="changeColorBox(this)" value="#444444" />
         </span>
-        <h2 class="todoTitle nbno" contenteditable>Title</h2>
-        <button class="addItem xImg nbno cPtr" onclick="addItem(0)" onmouseout="doNotWantToAddItem(this)"
-				onmouseover="wantToAddItem(this)"></button>
-        <button class="remove nbno cPtr" ondblclick="remove(0)" onmouseout="doNotWantToDeleteBox(this)" onmouseover="wantToDeleteBox(this)"></button>
+        <h2 class="todoTitle nbno" onblur="lostFocusedTitle(this)" contenteditable>Title</h2>
+        <button
+          class="addItem xImg nbno cPtr"
+          onclick="addItem(0)"
+          onmouseout="doNotWantToAddItem(this)"
+          onmouseover="wantToAddItem(this)"
+        ></button>
+        <button
+          class="remove nbno cPtr"
+          ondblclick="remove(0)"
+          onmouseout="doNotWantToDeleteBox(this)"
+          onmouseover="wantToDeleteBox(this)"
+        ></button>
         <div class="todoItemContainer">
           <div
             class="todoItem cPtr nbno boxShadow"
@@ -41,7 +53,12 @@
             onblur="lostFocused(this)"
             contenteditable
           ></div>
-          <span class="removeItem xImg" onmouseout="doNotWantToDeleteItem(this)" onmouseover="wantToDeleteItem(this)" ondblclick="removeItem(this)"></span>
+          <span
+            class="removeItem xImg"
+            onmouseout="doNotWantToDeleteItem(this)"
+            onmouseover="wantToDeleteItem(this)"
+            ondblclick="removeItem(this)"
+          ></span>
           <span class="colorPickerWrapper cPtr">
             <input
               id="aa"
@@ -51,7 +68,7 @@
             />
           </span>
         </div>
-        
+      </div> -->
     </div>
 
     <script src="js/app.js"></script>

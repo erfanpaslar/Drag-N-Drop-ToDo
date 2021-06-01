@@ -193,7 +193,7 @@ body {
   }
   .todo-box {
     width: 48vw;
-    max-height: 90vh;
+    max-height: 80vh;
     overflow-y: auto;
     border-radius: 0.5rem;
     margin: 0.5rem auto;
