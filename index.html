@@ -9,10 +9,11 @@
   </head>
   <body spellcheck="false">
     <div class="toolbar">
-      <span class="colorPickerBgWrapper">
+      <span class="colorPickerBgWrapper cPtr">
         <input type="color" onChange="changeColorBg(this)" value="#444444" />
       </span>
-      <button class="widget addCollection" onclick="addCollection()"></button>
+      <button class="widget addCollection xImg nbno cPtr" onclick="addCollection()"></button>
+			<!-- <h2 id="hintText" ></h2> -->
     </div>
     <div id="todoContainer" class="todoContainer">
       <div
@@ -23,15 +24,16 @@
         ondragenter="dragEnter(0)"
         ondragleave="dragLeave(0)"
       >
-        <span class="colorPickerBoxWrapper">
+        <span class="colorPickerBoxWrapper cPtr">
           <input type="color" onChange="changeColorBox(this)" value="#444444" />
         </span>
-        <h2 class="todoTitle" contenteditable>Title</h2>
-        <button class="widget addItem" onclick="addItem(0)"></button>
-        <button class="widget remove" onclick="remove(0)"></button>
+        <h2 class="todoTitle nbno" contenteditable>Title</h2>
+        <button class="addItem xImg nbno cPtr" onclick="addItem(0)" onmouseout="doNotWantToAddItem(this)"
+				onmouseover="wantToAddItem(this)"></button>
+        <button class="remove nbno cPtr" ondblclick="remove(0)" onmouseout="doNotWantToDeleteBox(this)" onmouseover="wantToDeleteBox(this)"></button>
         <div class="todoItemContainer">
           <div
-            class="todoItem input"
+            class="todoItem cPtr nbno boxShadow"
             ondrag="drag(event)"
             draggable="true"
             readonly="true"
@@ -39,8 +41,8 @@
             onblur="lostFocused(this)"
             contenteditable
           ></div>
-          <span class="widget removeItem" onclick="removeItem(this)"></span>
-          <span class="colorPickerWrapper">
+          <span class="removeItem xImg" onmouseout="doNotWantToDeleteItem(this)" onmouseover="wantToDeleteItem(this)" ondblclick="removeItem(this)"></span>
+          <span class="colorPickerWrapper cPtr">
             <input
               id="aa"
               type="color"

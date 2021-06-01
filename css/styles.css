@@ -9,6 +9,14 @@ body {
   background: #222;
   color: #eee;
 }
+/* 1.0 no Border and outline */
+.nbno {
+  border: 0;
+  outline: 0;
+}
+.cPtr {
+  cursor: pointer;
+}
 /*1.1 scrollbar */
 ::-webkit-scrollbar {
   margin: 1rem 0;
@@ -16,13 +24,11 @@ body {
   height: 0px;
   cursor: auto;
 }
-
 ::-webkit-scrollbar-track {
   background-color: #0000;
   -webkit-border-radius: 1rem;
   border-radius: 1rem;
 }
-
 ::-webkit-scrollbar-thumb {
   -webkit-border-radius: 1rem;
   border-radius: 1rem;
@@ -36,18 +42,76 @@ body {
   }
 }
 
+/* 1.2 image backgrounds and...*/
+.xImg {
+  -webkit-mask: url(../images/x.svg) no-repeat center;
+  mask: url(../images/x.svg) no-repeat center;
+  background-color: #eee5;
+}
+.boxShadow {
+  box-shadow: 0 10px 20px rgba(65, 65, 65, 0.16), 0 6px 6px rgba(0, 0, 0, 0.085);
+}
 /* 2.Section toolbar		  	*/
+
+.toolbar {
+  height: 4rem;
+}
+#hintText {
+  position: flex;
+  font-size: 1.7rem;
+  overflow-y: hidden;
+  color: #ffcf11;
+  margin-top: 0;
+  text-shadow: 0 10px 20px rgba(65, 65, 65, 0.16),
+    0 6px 6px rgba(0, 0, 0, 0.085);
+  /* align-items: center; */
+  /* margin-top: 0; */
+  text-align: center;
+  justify-content: center;
+}
+
+.addCollection {
+  position: absolute;
+  top: 0.9rem;
+  right: 1.2rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  transform: rotate(45deg);
+  transition: transform 0.2s ease-out;
+  /* .cPtr */
+  /* .nbno */
+  /* .xImg */
+}
+.addCollection:hover {
+  transform: scale(1.2) rotate(45deg);
+  transition: transform 0.2s ease-in;
+}
+
+.colorPickerBgWrapper {
+  position: absolute;
+  background: #6665;
+  left: 1rem;
+  top: 0.7rem;
+  border-radius: 50%;
+  /* .cPtr */
+}
+.colorPickerBgWrapper input[type="color"] {
+  width: 2rem;
+  height: 2rem;
+}
+
+@media screen and (min-width: 768px) {
+  .toolbar {
+    height: 3rem;
+  }
+
+  .addCollection {
+    position: absolute;
+    top: 0.75rem;
+  }
+}
+
 /* 3.Section each box		  	*/
-/* 4.Section each todo			*/
-
-/* ********************************************************************************* */
-/* ********************************************************************************* */
-/* ********************************************************************************* */
-/* ********************************************************************************* */
-/* ********************************************************************************* */
-/* ********************************************************************************* */
-/* ********************************************************************************* */
-
 .todo-box {
   display: flex;
   position: relative;
@@ -61,170 +125,68 @@ body {
   text-align: center;
   font-size: 2rem;
   padding: 0.5rem 0 0 0;
-  margin: 0.5rem 4rem;
-  outline: 0;
-  border: 0;
+  margin: 0.5rem 5rem;
+  /* .nbno */
+  transition: filter 0.5s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+.todoTitle:focus {
+  filter: brightness(150%);
 }
 
-.todoItem {
-  font-size: 1.2rem;
-  width: 100vw;
-  padding: 1rem 2rem 1rem 1rem;
-  box-sizing: border-box;
-  margin: 0.2rem auto;
-  background: #666;
-  cursor: pointer;
-  /* transition: background 0.1s linear; */
-}
-
-.todoItemContainer {
-  position: relative;
-  margin: 0 auto;
-}
-
-.removeItem {
-  position: absolute;
-  cursor: pointer;
-  right: 0.3rem;
-  top: 0.7rem;
-  width: 1rem;
-  height: 1rem;
-  /* background-image: url(../images/x.svg); */
-  background-color: #eee;
-  -webkit-mask: url(../images/x.svg) no-repeat center;
-  mask: url(../images/x.svg) no-repeat center;
-}
-
-.toolbar {
-  height: 3rem;
-}
-.addCollection {
-  position: absolute;
-  top: 0.7rem;
-  right: 1.5rem;
-  width: 1.5rem;
-  height: 2rem;
-  cursor: pointer;
-  outline: none;
-  border: none;
-  background-color: #fff;
-  -webkit-mask: url(../images/x.svg) no-repeat center;
-  mask: url(../images/x.svg) no-repeat center;
-  transform: rotate(45deg);
-  transition: transform 0.2s ease;
-}
-.addCollection:hover {
-  transform: scale(1.2) rotate(45deg);
-  transition: transform 0.2s ease;
-}
-.colorPickerBgWrapper {
-  position: absolute;
-  background: rgba(0, 0, 0, 0.363);
-  left: 1rem;
-  top: 0.6rem;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.colorPickerBgWrapper input[type="color"] {
-  width: 2rem;
-  height: 2rem;
-}
-
+/* 3.1 items in todo box */
 .colorPickerBoxWrapper {
   position: absolute;
-  background: rgba(0, 0, 0, 0.363);
-  right: 2.5rem;
+  background: #2226;
+  right: 2.7rem;
   top: 0.6rem;
   border-radius: 50%;
-  cursor: pointer;
+  /* cPtr */
 }
 .colorPickerBoxWrapper input[type="color"] {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
 }
-.colorPickerWrapper {
-  position: absolute;
-  background: rgba(0, 0, 0, 0.192);
-  top: 2.1rem;
-  right: 0.3rem;
-  border-radius: 50%;
-  cursor: pointer;
-}
-input[type="color"] {
-  cursor: pointer;
-  opacity: 0;
-  width: 1rem;
-  height: 1rem;
-  border: none;
-  background: #0000;
-  padding: 0;
+.colorPickerBoxWrapper:hover {
+  transform: scale(1.1);
 }
 
-.input {
-  outline: 0;
-  border: 0;
+.addItem {
+  position: absolute;
+  top: 0.79rem;
+  right: 0.7rem;
+  width: 1.2rem;
+  height: 1.2rem;
+  transform: rotate(45deg);
+  transition: transform 0.2s ease-out;
+  /* xImg */
+  /* cPtr */
+  /* nbno */
 }
-.enabled {
-  cursor: text;
-  /* transform: scale(1.1); */
-  transition: transform 0.1s linear;
+.addItem:hover {
+  transform: scale(1.2) rotate(45deg);
+  transition: transform 0.2s ease-in;
 }
 
 .remove {
   position: absolute;
-  top: 0.5rem;
+  top: 0.7rem;
   left: 0.5rem;
   width: 1.5rem;
   height: 1.5rem;
-  cursor: pointer;
-  outline: none;
-  border: none;
-  background-color: #fff;
+  background-color: #eee5;
   -webkit-mask: url(../images/trash.svg) no-repeat center;
   mask: url(../images/trash.svg) no-repeat center;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease-out;
+  /* cPtr */
+  /* nbno */
 }
 .remove:hover {
   transform: scale(1.2);
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease-in;
 }
-.addItem {
-  position: absolute;
-  top: 0.7rem;
-  right: 0.7rem;
-  width: 1rem;
-  height: 1rem;
-  cursor: pointer;
-  outline: none;
-  border: none;
-  background-color: #fff;
-  -webkit-mask: url(../images/x.svg) no-repeat center;
-  mask: url(../images/x.svg) no-repeat center;
-  transform: rotate(45deg);
-  transition: transform 0.2s ease;
-}
-.addItem:hover {
-  transform: scale(1.2) rotate(45deg);
-  transition: transform 0.2s ease;
-}
-.boxShadow {
-  box-shadow: 0 10px 20px rgba(65, 65, 65, 0.16),
-    0 6px 6px rgba(90, 90, 90, 0.085);
-}
-.todo-box:hover {
-  /* background: aqua; */
-  /* transition: background 0.1s linear; */
-}
-.dragOver {
-  /* background: #5555 !important; */
-  filter: brightness(150%);
-  padding: 0 0 5rem 0;
-  transition-duration: 0.5s;
-}
+
 @media screen and (min-width: 768px) {
   .todoContainer {
-    margin: auto;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     margin: auto 0vw;
@@ -236,27 +198,98 @@ input[type="color"] {
     border-radius: 0.5rem;
     margin: 0.5rem auto;
   }
+}
+@media screen and (min-width: 1024px) {
+  .todoContainer {
+    grid-template-columns: repeat(3, 1fr);
+    width: 100vw;
+  }
+  .todo-box {
+    width: 31.5vw;
+  }
+}
+
+/* 4.Section each todo			*/
+.wantToDeleteItem {
+  background: #fc3a52 !important;
+}
+.todoItem {
+  font-size: 1.2rem;
+  width: 100vw;
+  padding: 1rem 2.25rem 1rem 2.25rem;
+  box-sizing: border-box;
+  margin: 0.2rem auto;
+  background: #666;
+  /* .cPtr */
+}
+
+.todoItemContainer {
+  position: relative;
+  margin: 0 auto;
+}
+
+.removeItem {
+  position: absolute;
+  cursor: pointer;
+  left: 0.5rem;
+  top: 0.7rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  background-color: #eee;
+  /* xImg */
+}
+
+.colorPickerWrapper {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.192);
+  top: 0.7rem;
+  right: 0.4rem;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.colorPickerWrapper:hover {
+  transform: scale(1.25);
+}
+
+input[type="color"] {
+  cursor: pointer;
+  opacity: 0;
+  width: 1.3rem;
+  height: 1.3rem;
+  border: none;
+  background: #0000;
+  padding: 0;
+}
+
+.enabled {
+  cursor: text;
+  filter: brightness(130%);
+  transition: filter 0.1s linear;
+}
+
+.dragOver {
+  filter: brightness(150%);
+  padding: 0 0 5rem 0;
+  transition-duration: 0.5s;
+}
+
+@media screen and (min-width: 768px) {
   .todoItem {
     border-radius: 0.5rem;
     width: 45vw;
   }
 }
 @media screen and (min-width: 1024px) {
-  .todoContainer {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    width: 99vw;
-    margin: auto 0vw;
-  }
-  .todo-box {
-    width: 31.5vw;
-    max-height: 90vh;
-    overflow-y: auto;
-    border-radius: 0.5rem;
-    margin: 0.5rem auto;
-  }
   .todoItem {
     border-radius: 0.5rem;
     width: 30vw;
   }
 }
+
+/* ********************************************************************************* */
+/* ********************************************************************************* */
+/* ********************************************************************************* */
+/* ********************************************************************************* */
+/* ********************************************************************************* */
+/* ********************************************************************************* */
+/* ********************************************************************************* */

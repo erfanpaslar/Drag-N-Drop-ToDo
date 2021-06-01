@@ -89,6 +89,7 @@ function addItem(toCol) {
   children[children.length - 2].childNodes[1].focus();
 }
 function remove(toCol) {
+  document.getElementById("hintText").innerHTML = "";
   document.getElementById(`box${toCol}`).remove();
 }
 
@@ -186,7 +187,32 @@ function changeColorBg(me) {
     : "#222"; //+
   console.log(me.parentNode.parentNode.childNodes);
 }
+function wantToDeleteItem(me) {
+  me.parentNode.childNodes[1].classList.add("wantToDeleteItem");
+}
+function doNotWantToDeleteItem(me) {
+  me.parentNode.childNodes[1].classList.remove("wantToDeleteItem");
+}
+function wantToDeleteBox(me) {
+  me.parentNode.classList.add("wantToDeleteItem");
+}
+function doNotWantToDeleteBox(me) {
+  me.parentNode.classList.remove("wantToDeleteItem");
+}
+function wantToAddItem(me) {
+  me.parentNode.classList.add("dragOver");
+}
+function doNotWantToAddItem(me) {
+  me.parentNode.classList.remove("dragOver");
+}
 
+//removed
+function changeTextOnTop(text = "") {
+  document.getElementById("hintText").innerHTML = text;
+  setTimeout(() => {
+    document.getElementById("hintText").innerHTML = "";
+  }, 5000);
+}
 // const aCollection={
 // 	id:0,
 // 	content=[
