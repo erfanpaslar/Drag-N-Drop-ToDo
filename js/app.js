@@ -12,16 +12,16 @@ const messageTemplate = `
 	onclick="toggleThings(this)"
 	onblur="lostFocused(this)"
 	contenteditable
->...</div>
+></div>
 <span class="removeItem" onclick="removeItem(this)"></span>
 <span class="colorPickerWrapper">
-            <input
-              id="aa"
-              type="color"
-              onChange="changeColor(this)"
-              value="#2233ff"
-            />
-          </span>
+	<input
+		id="aa"
+		type="color"
+		onChange="changeColor(this)"
+		value="#444444"
+	/>
+</span>
 </div>
 `;
 var cols = {};
@@ -31,6 +31,7 @@ var cols = {};
 
 var draggedItem;
 var currentColumn;
+var dragCounter = 0;
 
 function drag(e) {
   draggedItem = e.target;
@@ -44,15 +45,25 @@ function dragEnter(col) {
   // cols[col].classList.add("dragOver");
   document.getElementById(`box${col}`).classList.add("dragOver");
   currentColumn = col;
+  dragCounter++;
+  console.log(dragCounter);
 }
+
+// disabled for now
 function dragLeave(col) {
-  document.getElementById(`box${col}`).classList.remove("dragOver");
+  dragCounter--;
+  console.log(dragCounter);
+  if (dragCounter == 0) {
+    document.getElementById(`box${col}`).classList.remove("dragOver");
+  }
   // cols[col].classList.remove("dragOver");
-  // document.getElementById(`box${col}`).classList.add("dragOver");
 }
 
 function drop(e) {
   e.preventDefault();
+  // dragCounter = 0;
+  dragCounter = 0;
+  console.log("dropped");
 
   // [...cols].forEach((column) => {
   //   column.classList.remove("dragOver");
@@ -73,9 +84,12 @@ function drop(e) {
 function addItem(toCol) {
   let column = document.getElementById(`box${toCol}`);
   column.innerHTML += messageTemplate;
+  let children = column.childNodes;
+  console.log(children[children.length - 2].childNodes[1]);
+  children[children.length - 2].childNodes[1].focus();
 }
 function remove(toCol) {
-  document.getElementById(`box${toCol}`).parentNode.remove();
+  document.getElementById(`box${toCol}`).remove();
 }
 
 function toggleThings(me) {
@@ -84,27 +98,36 @@ function toggleThings(me) {
 }
 
 function lostFocused(me) {
-  me.parentNode.classList.remove("enabled");
-  me.setAttribute("readOnly", true);
+  if (me.innerHTML) {
+    me.parentNode.classList.remove("enabled");
+    me.setAttribute("readOnly", true);
+  } else {
+    removeItem(me);
+  }
 }
 
 function addCollection() {
-  console.log("add");
   id += 1;
   const collectionTemplate = `<div
 	id="box${id}"
-	class="todo-box"
+	class="todo-box boxShadow"
 	ondrop="drop(event)"
 	ondragover="allowDrop(event)"
-	ondragenter="dragEnter(${id})"
+	ondragenter="dragEnter(${id})" 
 	ondragleave="dragLeave(${id})" >
-	<h2 class="todoTitle" >Title</h2>
+	<h2 class="todoTitle" contenteditable></h2>
 	<button class="addItem" onclick="addItem(${id})"></button>
 	<button class="remove" onclick="remove(${id})"></button>
 	</div>
 	`;
 
-  theContainer.innerHTML = collectionTemplate + theContainer.innerHTML;
+  // theContainer.innerHTML = collectionTemplate + theContainer.innerHTML;
+  theContainer.innerHTML += collectionTemplate;
+
+  let children = theContainer.childNodes;
+  children[children.length - 2].childNodes[1].focus();
+
+  console.log(children[children.length - 2].childNodes[1]);
 }
 
 function removeItem(me) {
@@ -126,9 +149,42 @@ function isDark(c) {
 
 function changeColor(me) {
   me.parentNode.parentNode.childNodes[1].style.background = `${me.value}`;
-  me.parentNode.parentNode.childNodes[1].style.color = isDark(me.value)
-    ? "#eee"
-    : "#222";
+  let dark = isDark(me.value);
+  me.parentNode.parentNode.childNodes[1].style.color = dark ? "#eee" : "#222";
+  me.parentNode.parentNode.childNodes[3].style.backgroundColor = dark
+    ? "#ccc"
+    : "#333";
+  me.parentNode.parentNode.childNodes[5].style.backgroundColor = dark
+    ? "#eee5"
+    : "#2226";
+  // console.log(me.parentNode.parentNode.childNodes);
+}
+function changeColorBox(me) {
+  me.parentNode.parentNode.style.background = `${me.value}`;
+  let dark = isDark(me.value);
+
+  me.parentNode.parentNode.style.color = dark ? "#eee" : "#222";
+  me.parentNode.parentNode.childNodes[1].style.backgroundColor = dark
+    ? "#bbb5"
+    : "#2226"; //O
+  me.parentNode.parentNode.childNodes[5].style.backgroundColor = dark
+    ? "#bbb"
+    : "#333"; //+
+  me.parentNode.parentNode.childNodes[7].style.backgroundColor = dark
+    ? "#bbb"
+    : "#222"; //trash
+  // console.log(me.parentNode.parentNode.childNodes);
+}
+function changeColorBg(me) {
+  document.body.style.background = `${me.value}`;
+  let dark = isDark(me.value);
+  me.parentNode.parentNode.childNodes[1].style.backgroundColor = dark
+    ? "#eee5"
+    : "#2226"; //O
+  me.parentNode.parentNode.childNodes[3].style.backgroundColor = dark
+    ? "#bbb"
+    : "#222"; //+
+  console.log(me.parentNode.parentNode.childNodes);
 }
 
 // const aCollection={
