@@ -1,8 +1,16 @@
 var main = { boxes: [] };
-const defaultBoxBg = "#444444";
-const defaultColorPicker = "#444444";
-const defaultBoxColor = "#ffffff";
-const defaultItemBg = "#eeeeee";
+const defaultBoxBg = "#bdbdbd";
+const defaultBoxColor = "#3a3a3a";
+const defaultItemBg = "#d4d4d4";
+
+const defaultXColorD = "#cccccc";
+const defaultXColorL = "#333333";
+
+const defaultOColorD = "#cccccc55";
+const defaultOColorL = "#22222255";
+
+const defaultTextColorD = "#eeeeee";
+const defaultTextColorL = "#181818";
 
 const theContainer = document.getElementById("todoContainer");
 const theCols = document.getElementsByClassName("todo-box");
@@ -29,7 +37,7 @@ const messageTemplate = `
 		<input
 			type="color"
 			onChange="changeColor(this)"
-			value="${defaultColorPicker}"
+			value="${defaultItemBg}"
 		/>
 	</span>
 </div>
@@ -43,6 +51,16 @@ var draggedItem;
 var draggedItemParentParent;
 var currentColumn;
 var dragCounter = 0;
+
+function rgb2hex(rgb) {
+  if (/^#[0-9A-F]{6}$/i.test(rgb)) return rgb;
+
+  rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+  function hex(x) {
+    return ("0" + parseInt(x).toString(16)).slice(-2);
+  }
+  return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+}
 
 function drag(e) {
   draggedItem = e.target;
@@ -61,7 +79,6 @@ function dragEnter(col) {
 
 function dragLeave(col) {
   dragCounter--;
-  console.log(dragCounter);
   if (dragCounter == 0) {
     document.getElementById(`box${col}`).classList.remove("dragOver");
   }
@@ -70,11 +87,7 @@ function dragLeave(col) {
 function drop(e) {
   e.preventDefault();
   dragCounter = 0;
-  console.log("dropped");
 
-  // [...cols].forEach((column) => {
-  //   column.classList.remove("dragOver");
-  // });
   for (let i = 0; i <= id; i++) {
     let column = document.getElementById(`box${i}`);
     if (column) {
@@ -85,24 +98,22 @@ function drop(e) {
     .getElementById(`box${currentColumn}`)
     .appendChild(draggedItem.parentNode);
 
-  // console.log(currentColumn + " " + draggedItemParentParent.id);
   for (let i = 0; i < main.boxes.length; i++) {
     if (`box${main.boxes[i].id}` == draggedItemParentParent.id) {
       for (var j = 0; j < main.boxes[i].content.length; j++) {
         // main.boxes[i].content.forEach((cont) => {
         if (main.boxes[i].content[j].text == draggedItem.innerText) {
           main.boxes[i].content.splice(j, 1);
-          console.log("delete from parent");
         }
       }
-      // saveToDo();
     }
     if (main.boxes[i].id == currentColumn) {
       main.boxes[i].content.push({
         text: draggedItem.innerText,
-        background: draggedItem.parentNode.childNodes[1].style.background,
+        background: draggedItem.parentNode.childNodes[1].style.background
+          ? rgb2hex(`${draggedItem.parentNode.childNodes[1].style.background}`)
+          : defaultItemBg,
       });
-      // saveToDo();
     }
   }
   saveToDo();
@@ -112,12 +123,11 @@ function addItem(toCol) {
   let column = document.getElementById(`box${toCol}`);
   column.innerHTML += messageTemplate;
   let children = column.childNodes;
-  console.log(children[children.length - 2].childNodes[1]);
   children[children.length - 2].childNodes[1].focus();
 
-  for (let i = 0; i < main.boxes.length; i++) {
-    if (main.boxes[i].id == toCol) {
-      main.boxes[i].content.push({ text: "", background: defaultItemBg });
+  for (let item of main.boxes) {
+    if (item.id == toCol) {
+      item.content.push({ text: "", background: defaultItemBg });
     }
   }
 }
@@ -139,19 +149,17 @@ function toggleThings(me) {
 }
 
 function updateTheContentOf(me) {
-  // console.log("updating");
-  // console.log(me);
   // me is me.parentNode.parentNode -> the box
   for (let i = 0; i < main.boxes.length; i++) {
     if (`box${main.boxes[i].id}` == me.id) {
       main.boxes[i].content = [];
       const children = me.children;
-      console.log(children);
       for (let j = 4; j < children.length; j++) {
-        // console.log(j + " " + children[j]);
         main.boxes[i].content.push({
           text: children[j].children[0].innerText,
-          background: children[j].childNodes[1].style.background,
+          background: children[j].childNodes[1].style.background
+            ? rgb2hex(`${children[j].childNodes[1].style.background}`)
+            : defaultItemBg,
         });
       }
       saveToDo();
@@ -169,28 +177,17 @@ function lostFocused(me) {
     removeItem(me);
   }
   updateTheContentOf(me.parentNode.parentNode);
-  // for (let i = 0; i < main.boxes.length; i++) {
-  //   if (`box${main.boxes[i].id}` == me.parentNode.parentNode.id) {
-  //     main.boxes[i].content = [];
-  //     const children = me.parentNode.parentNode.children;
-  //     console.log(children);
-  //     for (let j = 4; j < children.length; j++) {
-  //       // console.log(j + " " + children[j]);
-  //       main.boxes[i].content.push(children[j].children[0].innerText);
-  //     }
-  //     saveToDo();
-  //     break;
-  //   }
-  // }
 }
+
 function lostFocusedTitle(me) {
-  for (let i = 0; i < main.boxes.length; i++) {
-    if (me.parentNode.id == `box${i}`) {
-      main.boxes[i].title = me.innerText;
+  for (let box of main.boxes) {
+    if (me.parentNode.id == `box${box.id}`) {
+      box.title = me.innerText;
     }
   }
   saveToDo();
 }
+
 function addCollection() {
   id += 1;
   const collectionTemplate = `
@@ -203,7 +200,7 @@ function addCollection() {
 		ondragleave="dragLeave(${id})"
 	>
 		<span class="colorPickerBoxWrapper cPtr">
-			<input type="color" onChange="changeColorBox(this)" value="${defaultColorPicker}" />
+			<input type="color" onChange="changeColorBox(this)" value="${defaultBoxBg}" />
 		</span>
 		<h2 class="todoTitle nbno" onblur="lostFocusedTitle(this)" contenteditable></h2>
 		<button
@@ -221,13 +218,10 @@ function addCollection() {
 	</div>
 	`;
 
-  // theContainer.innerHTML = collectionTemplate + theContainer.innerHTML;
   theContainer.innerHTML += collectionTemplate;
 
   let children = theContainer.children;
   children[children.length - 1].childNodes[3].focus();
-
-  // console.log(children[children.length - 2].childNodes[3]);
 
   // add to list when a BOX created
   main.boxes.push({
@@ -236,6 +230,7 @@ function addCollection() {
     color: defaultBoxColor,
     content: [],
   });
+  main.lastId = id;
   saveToDo();
 }
 
@@ -261,56 +256,59 @@ function isDark(c) {
 function changeColor(me) {
   me.parentNode.parentNode.childNodes[1].style.background = `${me.value}`;
   let dark = isDark(me.value);
-  me.parentNode.parentNode.childNodes[1].style.color = dark ? "#eee" : "#222";
+
+  me.parentNode.parentNode.childNodes[1].style.color = dark
+    ? `${defaultTextColorD}`
+    : `${defaultTextColorL}`;
   me.parentNode.parentNode.childNodes[3].style.backgroundColor = dark
-    ? "#ccc"
-    : "#333";
+    ? `${defaultXColorD}`
+    : `${defaultXColorL}`;
   me.parentNode.parentNode.childNodes[5].style.backgroundColor = dark
-    ? "#eee5"
-    : "#2226";
+    ? `${defaultOColorD}`
+    : `${defaultOColorL}`;
 
   updateTheContentOf(me.parentNode.parentNode.parentNode);
   saveToDo();
-  // console.log(me.parentNode.parentNode.childNodes);
   // Changing a color of a element
   // main.boxes."for each where id == ?id?".
 }
+
 function changeColorBox(me) {
   me.parentNode.parentNode.style.background = `${me.value}`;
   let dark = isDark(me.value);
 
-  me.parentNode.parentNode.style.color = dark ? "#eee" : "#222";
-  me.parentNode.parentNode.childNodes[1].style.backgroundColor = dark
-    ? "#bbb5"
-    : "#2226"; //O
-  me.parentNode.parentNode.childNodes[5].style.backgroundColor = dark
-    ? "#bbb"
-    : "#333"; //+
-  me.parentNode.parentNode.childNodes[7].style.backgroundColor = dark
-    ? "#bbb"
-    : "#333"; //trash
+  me.parentNode.parentNode.children[1].style.color = dark
+    ? `${defaultTextColorD}`
+    : `${defaultTextColorL}`;
 
+  me.parentNode.parentNode.childNodes[1].style.background = dark
+    ? `${defaultOColorD}`
+    : `${defaultOColorL}`; //O
+  me.parentNode.parentNode.childNodes[5].style.background = dark
+    ? `${defaultXColorD}`
+    : `${defaultXColorL}`; //+
+  me.parentNode.parentNode.childNodes[7].style.background = dark
+    ? `${defaultXColorD}`
+    : `${defaultXColorL}`; // trash
   // this is like on update : me.parentNode.parentNode
-  console.log(me.parentNode.parentNode.id);
   // main.boxes
   for (let i = 0; i < main.boxes.length; i++) {
-    if (me.parentNode.parentNode.id == `box${i}`) {
+    if (me.parentNode.parentNode.id == `box${main.boxes[i].id}`) {
       main.boxes[i].background = `${me.value}`;
     }
   }
   saveToDo();
-  // console.log(me.parentNode.parentNode.childNodes);
 }
+
 function changeColorBg(me) {
   document.body.style.background = `${me.value}`;
   let dark = isDark(me.value);
-  me.parentNode.parentNode.childNodes[1].style.backgroundColor = dark
-    ? "#eee5"
-    : "#2226"; //O
-  me.parentNode.parentNode.childNodes[3].style.backgroundColor = dark
-    ? "#bbb"
-    : "#333"; //+
-  // console.log(me.parentNode.parentNode.childNodes);
+  me.parentNode.parentNode.childNodes[1].style.background = dark
+    ? `${defaultOColorD}`
+    : `${defaultOColorL}`; //O
+  me.parentNode.parentNode.childNodes[3].style.background = dark
+    ? `${defaultXColorD}`
+    : `${defaultXColorL}`; //+
   main.background = `${me.value}`;
   saveToDo();
 }
@@ -334,34 +332,115 @@ function doNotWantToAddItem(me) {
   me.parentNode.classList.remove("dragOver");
 }
 
-//removed
-// function changeTextOnTop(text = "") {
-//   document.getElementById("hintText").innerHTML = text;
-//   setTimeout(() => {
-//     document.getElementById("hintText").innerHTML = "";
-//   }, 5000);
-// }
-
-// const aCollection2={
-// 	id: 0,
-//	title:"title"
-// 	background: "#123456",
-// 	color:"#eeeeee",
-// 	content=[
-// 		{text:"aaa", background:"#222222"},
-// 		{text:"bbb", background:"#222222"},
-// 		{text:"ccc", background:"#222222"},
-// 	],
-// }
-// const main2={
-// 	background:"#999999",
-// 	color:"#222222",
-// 	boxes: [addCollection, bCollection, cCollection]
-// }
-
 function saveToDo() {
   localStorage.setItem("YourToDos", JSON.stringify(main));
-  // var storedNames = JSON.parse(localStorage.getItem("names"));
-
-  console.log(main);
 }
+
+function loadToDo(collectionName = "YourToDos") {
+  let loadedMain = JSON.parse(localStorage.getItem("YourToDos"));
+  main = loadedMain != null ? loadedMain : main;
+  if (loadedMain) {
+    theContainer.innerHTML = "";
+    id = loadedMain != null ? loadedMain.lastId : -1;
+    document.body.style.background = loadedMain.background;
+
+    let dark = loadedMain.background ? isDark(loadedMain.background) : 0;
+    document.body.childNodes[1].childNodes[1].style.background = dark
+      ? `${defaultOColorD}`
+      : `${defaultOColorL}`; //O for page background
+    document.body.childNodes[1].childNodes[3].style.background = dark
+      ? `${defaultXColorD}`
+      : `${defaultXColorL}`; // + fro adding new box
+
+    for (let box of loadedMain.boxes) {
+      let theBoxAndItems = "";
+      if (box.id || box.id === 0) {
+        theBoxAndItems += `
+				<div
+					id="box${box.id}"
+					class="todo-box boxShadow"
+					ondrop="drop(event)"
+					ondragover="allowDrop(event)"
+					ondragenter="dragEnter(${box.id})"
+					ondragleave="dragLeave(${box.id})"
+					style="background:${box.background};"
+				>
+					<span class="colorPickerBoxWrapper cPtr" style="background:
+					${isDark(box.background) ? defaultOColorD : defaultOColorL};">
+						<input type="color" onChange="changeColorBox(this)" value="${box.background}" />
+					</span>
+					<h2 class="todoTitle nbno" onblur="lostFocusedTitle(this)" contenteditable
+					style="color:
+					${isDark(box.background) ? defaultTextColorD : defaultTextColorL}
+					"
+					>${box.title}</h2>
+
+					<button
+						class="addItem xImg nbno cPtr"
+						onclick="addItem(${box.id})"
+						onmouseout="doNotWantToAddItem(this)"
+						onmouseover="wantToAddItem(this)"
+						style="background:
+					${isDark(box.background) ? defaultXColorD : defaultXColorL}
+					"
+					></button>
+					<button
+						class="remove nbno cPtr"
+						ondblclick="remove(${box.id})"
+						onmouseout="doNotWantToDeleteBox(this)"
+						onmouseover="wantToDeleteBox(this)"
+						style="background:
+					${isDark(box.background) ? defaultXColorD : defaultXColorL}
+					"
+					></button>
+					
+					`;
+
+        for (let content of box.content) {
+          theBoxAndItems += `
+				<div class="todoItemContainer">
+					<div
+						class="todoItem cPtr nbno boxShadow"
+						ondrag="drag(event)"
+						draggable="true"
+						readonly="true"
+						onclick="toggleThings(this)"
+						onblur="lostFocused(this)"
+						contenteditable
+						style="
+						background:${content.background};
+						color:
+						${isDark(content.background) ? defaultTextColorD : defaultTextColorL}
+						"
+						>${content.text}</div>
+					<span
+						class="removeItem xImg"
+						onmouseout="doNotWantToDeleteItem(this)"
+						onmouseover="wantToDeleteItem(this)"
+						ondblclick="removeItem(this)"
+						style="
+						background:
+						${isDark(content.background) ? defaultXColorD : defaultXColorL}"
+					></span>
+					<span class="colorPickerWrapper cPtr"
+					style="background:
+						${isDark(content.background) ? defaultOColorD : defaultOColorL};">
+						<input
+							type="color"
+							onChange="changeColor(this)"
+							value="${content.background}"
+							/>
+						</span>
+					</div>`;
+        }
+        theBoxAndItems += "</div>";
+
+        theContainer.innerHTML += theBoxAndItems;
+      } else {
+        //pass
+      }
+    }
+  }
+}
+
+loadToDo("YourToDos");
