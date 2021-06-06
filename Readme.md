@@ -19,4 +19,6 @@ Your data will save on your local storage.
 
 It's run on [https://erfanpaslar.ir/todo](https://erfanpaslar.ir/todo)
 
+Note that the http and https have separate lists.
+
 ### If you seen a bug or something, please let me know on issues.
